@@ -1,4 +1,5 @@
 import amqp from 'amqplib/callback_api';
+import axios from 'axios';
 
 import logger from "./models/logger";
 
@@ -20,10 +21,21 @@ amqp.connect(`amqp://${process.env.AMQP_HOST}`, function(error0: any, connection
       durable: false
     });
 
-    logger.info(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
+    logger.info(" [*] Waiting for messages in %s.", queue);
 
     channel.consume(queue, (msg: any) => {
-      logger.info(" [x] Received %s", msg.content.toString());
+      const json_data = JSON.parse(msg.content.toString());
+
+      logger.info(" [x] Received %s", json_data);
+
+      axios.post(`${process.env.REST_API_HOST}service/${json_data.service_id}/update`, {
+        image: json_data.image,
+        tag: json_data.tag,
+      }).then((resp) => {
+        logger.info(resp)
+      }).catch((err) => {
+        logger.error(err)
+      })
     }, {
       noAck: true
     });
