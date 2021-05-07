@@ -34,6 +34,7 @@ amqp.connect(`${process.env.AMQP_HOST}`, function(error0: any, connection: any) 
         axios.post(`${process.env.REST_API_HOST}service/${json_data.service_id}/update`, {
           image: json_data.image,
           tag: json_data.tag,
+          webhook_id: json_data.webhook_id,
         }).then((resp) => {
           logger.info(resp)
         }).catch((err) => {
