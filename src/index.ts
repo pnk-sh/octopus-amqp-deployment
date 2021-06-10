@@ -8,20 +8,20 @@ require('dotenv').config()
 amqp.connect(`${process.env.AMQP_HOST}`, function(error0: any, connection: any) {
   if (error0) {
     logger.error(`can't connect to RabbitMQ ${process.env.AMQP_HOST}`)
-    process.exit()
+    process.exit(1)
   }
   
   connection.createChannel((error1: any, channel: any) => {
     if (error1) {
       logger.error(`can't createChannel in RabbitMQ ${process.env.AMQP_HOST}`)
-      process.exit()
+      process.exit(1)
     }
     
     axios.get(`${process.env.REST_API_HOST}info`).then((resp) => {
       const cluster_id = resp.data.resualt.Swarm.Cluster.ID;
       if (!cluster_id) {
         logger.error('cluster_id missing')
-        process.exit()
+        process.exit(1)
       }
 
       const queue = `${process.env.AMQP_QUEUE}-${cluster_id}`;
