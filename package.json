@@ -20,7 +20,7 @@
   "homepage": "https://github.com/pnk-sh/octopus-amqp-deployment#readme",
   "dependencies": {
     "amqplib": "^0.8.0",
-    "axios": "^0.21.3",
+    "axios": "^0.21.4",
     "dotenv": "^9.0.2",
     "log4js": "^6.3.0"
   },
